@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TodoLibrary.DataAccess;
 
@@ -11,11 +12,11 @@ namespace MinimalApi.Endpoints
         {
 
             app.MapGet("/api/Todos", GetAllTodos);
-            app.MapPost("/api/Todos", CreateTodo);
-            app.MapDelete("/api/Todos/{id}", DeleteTodo);
+            app.MapPost("/api/Todos", CreateTodo).RequireAuthorization();
+            app.MapDelete("/api/Todos/{id}", DeleteTodo).RequireAuthorization();
         }
 
-
+        [Authorize]
         private async static Task<IResult> GetAllTodos(ITodoData data)
         {
             var output = await data.GetAllAssigned(1);
